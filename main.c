@@ -16,24 +16,13 @@
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
+#include "global.h"
 /***********************
  * 1.只有网络连接时端口时，才能创建串口读写，
  * 2.串口读数据时间太长了
  * 
  * 
  **************/
-#define COM_PORT_BASE     1101    //端口号不能发生冲突,
-#define SERIAL_NUMBER 4                 //串口数量
-#define SERIAL_READ_BUF_LENGHT  256        //串口数据缓存长度
-FILE *fp;
-
-typedef struct {
-    unsigned int baudrate;      /* 波特率 */
-    unsigned char dbit;         /* 数据位 */
-    char parity;                /* 奇偶校验 */
-    unsigned char sbit;         /* 停止位 */
-    unsigned char dev_name[30]; /* /dev下串口名字*/
-}uart_cfg_t;
 
 int fd[SERIAL_NUMBER]={0},connfd[SERIAL_NUMBER]={0};
 int sockfd[SERIAL_NUMBER]={0};//network file descriptors
@@ -48,14 +37,7 @@ socklen_t cliLen = sizeof(cliAddr);
 static int serial_read_flag;      //串口终端对应的文件描述符
 
 void com_init(void){
-    strcpy(com[0].dev_name,"/dev/ttyAMA0");
-    com[0].baudrate=460800;
-    strcpy(com[1].dev_name,"/dev/ttyAMA1");
-    com[1].baudrate=460800;
-    strcpy(com[2].dev_name,"/dev/ttyAMA2");
-    com[2].baudrate=115200;
-    strcpy(com[3].dev_name,"/dev/ttyAMA3");
-    com[3].baudrate=115200;
+
 }
 
 /*进程退出处理函数*/
@@ -94,9 +76,9 @@ static int uart_init(uart_cfg_t *serial)
     int fd=-1;
     struct termios new_cfg = {0};   //将new_cfg对象清零
     speed_t speed;
-    fd = open(serial->dev_name, O_RDWR | O_NOCTTY);
+    fd = open(serial->dev, O_RDWR | O_NOCTTY);
     if (fd<0) {
-        fprintf(stderr, "open error: %s: %s\n", serial->dev_name, strerror(errno));
+        fprintf(stderr, "open error: %s: %s\n", serial->dev, strerror(errno));
         return -1;
     }
     printf("serial open success\n");

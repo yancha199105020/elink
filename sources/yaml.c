@@ -7,7 +7,7 @@
 #include "libfyaml.h"
 #include "sys_log.h"
 
-uart_cfg_t com[SERIAL_NUMBER];
+
 int serial_parameter_init(char * filename){
     struct fy_document* fyd;
     struct fy_node *fyn, *fyn_root, *fyn_serial, *fyn_para;

@@ -11,6 +11,7 @@ typedef struct {
     char mode[10];              //网络传输模式TCP UDP
     //char name[30];              //串口名字
 }uart_cfg_t;
+
 int serial_parameter_init(char * filename);
 #define COM_PORT_BASE     1101          //端口号不能发生冲突,
 #define SERIAL_NUMBER 4                 //串口数量
